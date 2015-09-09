@@ -159,7 +159,26 @@ def flipflop(filename):
 
 # Sound function to write #1:  reverse
 
-
+def reverse(filename):
+    """ reverse reverses the original file
+        input: filename, the name of the original file
+        output: no return value, but
+                this creates the sound file 'out.wav'
+                and plays it
+    """
+    print "Playing the original sound..."
+    play(filename)
+    
+    print "Reading in the sound data..."
+    samps, sr = readwav(filename)
+    
+    print "Computing new sound..."
+    newsamps = samps[::-1] # reverse
+    newsr = sr                       # no change to the sr
+    
+    writewav( newsamps, newsr, "out.wav" )
+    print "Playing new sound..."
+    play( 'out.wav' )
 
 
 
@@ -167,6 +186,26 @@ def flipflop(filename):
 
 # Sound function to write #2:  volume
 
+def volume(filename, scale_factor):
+    """ volume increases the volume by the floating-point value scale_value
+        input: filename, the name of the original file
+        output: no return value, but
+                this creates the sound file 'out.wav'
+                and plays it
+    """
+    print "Playing the original sound..."
+    play(filename)
+    
+    print "Reading in the sound data..."
+    samps, sr = readwav(filename)
+    
+    print "Computing new sound..."
+    newsamps = [x * scale_factor for x in samps]
+    newsr = sr                       # no change to the sr
+    
+    writewav( newsamps, newsr, "out.wav" )
+    print "Playing new sound..."
+    play( 'out.wav' )
 
 
 
@@ -176,6 +215,26 @@ def flipflop(filename):
 # Sound function to write #3:  static
 
 
+def static(filename, probability_of_static):
+    """ static introduces random bits of static based on the probability given
+        input: filename, the name of the original file
+        output: no return value, but
+                this creates the sound file 'out.wav'
+                and plays it
+    """
+    print "Playing the original sound..."
+    play(filename)
+    
+    print "Reading in the sound data..."
+    samps, sr = readwav(filename)
+    
+    print "Computing new sound..."
+    newsamps = replace_some(samps, probability_of_static)
+    newsr = sr                       # no change to the sr
+    
+    writewav( newsamps, newsr, "out.wav" )
+    print "Playing new sound..."
+    play( 'out.wav' )
 
 
 
@@ -184,7 +243,28 @@ def flipflop(filename):
 # Sound function to write #4:  overlay
 
 
-
+def overlay(filename1, filename2):
+    """ overlay creates a sound that overlays the two given sound files
+        input: filename, the name of the original file
+        output: no return value, but
+                this creates the sound file 'out.wav'
+                and plays it
+    """
+    print "Playing the original sound..."
+    play(filename1)
+    play(filename2)
+    
+    print "Reading in the sound data..."
+    samps1, sr1 = readwav(filename1)
+    samps2, sr2 = readwav(filename2)
+    
+    print "Computing new sound..."
+    newsamps = add_scale_2(samps1, samps2, 0.5, 0.5)
+    newsr = (sr1+sr2)/2                      # no change to the sr
+    
+    writewav( newsamps, newsr, "out.wav" )
+    print "Playing new sound..."
+    play( 'out.wav' )
 
 
 
@@ -192,7 +272,28 @@ def flipflop(filename):
 # Sound function to write #5:  echo
 
 
-
+def echo(filename, time_delay):
+    """ echo takes in a filename and overlays the same sound on itself, shifted by time_delay
+        input: filename, the name of the original file
+        output: no return value, but
+                this creates the sound file 'out.wav'
+                and plays it
+    """
+    print "Playing the original sound..."
+    play(filename)
+    
+    print "Reading in the sound data..."
+    samps, sr = readwav(filename)
+    
+    print "Computing new sound..."
+    echosamps = [0]*(time_delay*float(sr)) + samps
+    echosamps = echosamps[:len(samps)]
+    newsamps = [echosamps[i]+samps[i] for i in xrange(len(samps))]
+    newsr = sr                      # no change to the sr
+    
+    writewav( newsamps, newsr, "out.wav" )
+    print "Playing new sound..."
+    play( 'out.wav' )
 
 
 
